@@ -15,24 +15,35 @@
     </head>
     <body>
         <h1>Table des codes de promotion</h1>
-        <form >
+        <form>
             <label for="code">
                 Code: <input type="text" name="code" size="1" maxlength="1" 
                     title="Veuillez choisir une lettre, en majuscule ou minuscule"
                     pattern="[a-zA-Z]" required>
             </label>
             
-            <label style="padding-left: 10px">
-                Taux: <input name="taux" type="number" step="0.01" min="0.0" max="99.99" size="1">
+            <label style="margin-left: 10px">
+                Taux: <input name="taux" type="number" step="0.01" min="0.0" max="99.99" size="1" required>
             </label>
-            
-            <button type="submit">Ajouter</button>
+            <input type="hidden" name="action" value="ADD">
+            <button type="submit" style="margin-left: 10px">Ajouter</button>
         </form>
         
         <div>
-            <h4></h4>
+            <h4>${confirmationAction}</h4>
         </div>
         
-        
+        <div>
+            <table border="1">
+                <th>Code</th><th>Taux</th><th>Action</th>
+                <c:forEach var="ligne" items="${fullTable}">
+                    <tr>
+                        <td>${ligne.code}</td>
+                        <td>${ligne.taux}</td>
+                        <td><a href="?action=DELETE&code=${ligne.code}" style="text-decoration:none">DELETE</a></td>
+                    </tr>
+                </c:forEach>                
+            </table>
+        </div>
     </body>
 </html>

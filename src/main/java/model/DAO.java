@@ -73,7 +73,7 @@ public class DAO {
             }
 	}
         
-        public List<DiscountCodeEntity> fullTable() throws DAOException{
+        public List<DiscountCodeEntity> getFullTable() throws DAOException{
             ArrayList<DiscountCodeEntity> table = new ArrayList<>();
             String sql = "SELECT * FROM DISCOUNT_CODE";
             try (   Connection connection = myDataSource.getConnection();
@@ -81,7 +81,9 @@ public class DAO {
             ) {
                     ResultSet rs = stmt.executeQuery(sql);
                     while(rs.next()){
-                        //TODO: ajouter chaque code de promotion à la liste
+                        char code = rs.getString("DISCOUNT_CODE").charAt(0);
+                        float taux = rs.getFloat("RATE");
+                        table.add(new DiscountCodeEntity(code, taux));
                     }
 
 
@@ -91,6 +93,8 @@ public class DAO {
                     Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
                     throw new DAOException(ex.getMessage());
             }
+            
+            return table;
         }
 	
 
