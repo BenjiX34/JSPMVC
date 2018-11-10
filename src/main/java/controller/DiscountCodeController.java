@@ -50,20 +50,25 @@ public class DiscountCodeController extends HttpServlet {
                 
                 switch (action) {
                     case "DELETE":{
-                        if(usedDiscountCodes.contains(code)){
-                            messageConfirmation = "Le code "+code+" ne peut pas être supprimé: il est utilisé";    
-                        }else{
-                            dao.deleteDiscountCode(code);
-                            messageConfirmation = "Le code "+code+" a bien été supprimé de la table";    
+                            try{
+                                dao.deleteDiscountCode(code);
+                                messageConfirmation = "Le code "+code+" a bien été supprimé de la table";
+                            }catch(DAOException ex){
+                                messageConfirmation = "ERREUR: Le code "+code+" ne peut pas être supprimé: il est utilisé"; 
+                            }
                         }
                         
                         break;
-                    }
+                    
                     
                     case "ADD":{
                         double taux = Double.parseDouble(request.getParameter("taux"));
-                        dao.addDiscountCode(code, taux);
-                        messageConfirmation = "Le code "+code+" a bien été ajouté à la table";
+                        try{
+                            dao.addDiscountCode(code, taux);
+                            messageConfirmation = "Le code "+code+" a bien été ajouté à la table";
+                        }catch(DAOException ex){
+                            messageConfirmation = "ERREUR: Le code "+code+" est déjà présent dans la table";
+                        }
                         break;
                     }
                     
