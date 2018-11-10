@@ -61,7 +61,7 @@ public class DiscountCodeController extends HttpServlet {
                     }
                     
                     case "ADD":{
-                        float taux = Float.parseFloat(request.getParameter("taux"));
+                        double taux = Double.parseDouble(request.getParameter("taux"));
                         System.out.println("TAUX = "+taux);
                         dao.addDiscountCode(code, taux);
                         messageConfirmation = "Le code "+code+" a bien été ajouté à la table";
@@ -69,7 +69,7 @@ public class DiscountCodeController extends HttpServlet {
                     }
                     
                     case "MODIFY":{
-                        float taux = Float.parseFloat(request.getParameter("taux"));
+                        double taux = Double.parseDouble(request.getParameter("taux"));
                         System.out.println("TAUX = "+taux);
                         dao.modifyDiscountCode(code, taux);
                         messageConfirmation = "Le code "+code+" a bien été modifié dans la table";

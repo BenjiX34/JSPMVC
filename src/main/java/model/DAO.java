@@ -54,7 +54,7 @@ public class DAO {
          * @return le nombre d'enregistrements ajoutés (1 ou 0 si pas trouvé)
          * @throws DAOException 
          */
-	public int addDiscountCode(char discountID, float taux) throws DAOException {
+	public int addDiscountCode(char discountID, double taux) throws DAOException {
             String sqlQuery = "INSERT INTO Discount_Code VALUES (?, ?)";
             
             try (   Connection connection = myDataSource.getConnection();
@@ -62,7 +62,7 @@ public class DAO {
             ) {
 
                     stmt.setString(1, String.valueOf(discountID));
-                    stmt.setFloat(2, taux);
+                    stmt.setDouble(2, taux);
 
                     return stmt.executeUpdate();
 
@@ -114,15 +114,15 @@ public class DAO {
         }
         
         
-        public int modifyDiscountCode(char discountID, float taux) throws DAOException {
+        public int modifyDiscountCode(char discountID, double taux) throws DAOException {
             String sqlQuery = "UPDATE Discount_Code "+
                         "SET Rate=? WHERE Discount_Code=?";
             
             try (   Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sqlQuery)
             ) {
-                    System.out.println("TAUX DANS MODIFY: "+taux);
-                    stmt.setFloat(1, taux);
+                    System.out.println("TAUX DANS MODIFY: "+(double)taux);
+                    stmt.setDouble(1, taux);
                     stmt.setString(2, String.valueOf(discountID));
 
                     return stmt.executeUpdate();
