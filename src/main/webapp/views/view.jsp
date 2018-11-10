@@ -34,13 +34,23 @@
         </div>
         
         <div>
+            <p></p>
             <table border="1">
                 <th>Code</th><th>Taux</th><th>Action</th>
                 <c:forEach var="ligne" items="${fullTable}">
                     <tr>
                         <td>${ligne.code}</td>
                         <td>${ligne.taux}</td>
-                        <td><a href="?action=DELETE&code=${ligne.code}" style="text-decoration:none">DELETE</a></td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${usedCodes.contains(ligne.code)}">
+                                    Utilisé
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="?action=DELETE&code=${ligne.code}" style="text-decoration:none">Supprimer?</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                     </tr>
                 </c:forEach>                
             </table>

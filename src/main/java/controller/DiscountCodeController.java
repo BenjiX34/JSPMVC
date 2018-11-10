@@ -42,9 +42,7 @@ public class DiscountCodeController extends HttpServlet {
             
             String action = request.getParameter("action");
             
-            if(action == null){
-                
-            }else{
+            if(action != null){
                 char code = request.getParameter("code").charAt(0);
                 if(action.equals("ADD")){
                     float taux = Float.parseFloat(request.getParameter("taux"));
@@ -59,25 +57,18 @@ public class DiscountCodeController extends HttpServlet {
                     String confirmationSuppression = "Le code "+Character.toString(code)+" a été supprimé de la table";
                     request.setAttribute("confirmationAction", confirmationSuppression);
                 }
-                
-                    
+                 
             }
+
+            List<Character> usedDiscountCodes = dao.usedDiscountCodes();
             
-            
-            /*System.out.println("Code: "+code);
-            System.out.println("Taux: "+taux);
-            System.out.println("Action: "+action);
-            System.out.print("Table: "+fullTable);
-            System.out.println(" | Taille table:"+fullTable.size());*/
             List<DiscountCodeEntity> fullTable = dao.getFullTable();
+
+            request.setAttribute("usedCodes", usedDiscountCodes);
             request.setAttribute("fullTable", fullTable);
             request.getRequestDispatcher("views/view.jsp").forward(request, response);
             
-        }catch(DAOException ex){
-            request.setAttribute("confirmationAction", "Ce code est utilisé");
-            request.getRequestDispatcher("views/view.jsp").forward(request, response);
-            Logger.getLogger("servlet").log(Level.SEVERE, "Erreur de traitement", ex);
-        }catch(IOException | NumberFormatException | SQLException | ServletException ex){
+        }catch(IOException | NumberFormatException | SQLException | ServletException | DAOException ex){
             request.setAttribute("confirmationAction", ex.getMessage());
             request.getRequestDispatcher("views/view.jsp").forward(request, response);
             Logger.getLogger("servlet").log(Level.SEVERE, "Erreur de traitement", ex);

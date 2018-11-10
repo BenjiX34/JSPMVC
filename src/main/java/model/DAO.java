@@ -97,5 +97,23 @@ public class DAO {
             return table;
         }
 	
+        public List<Character> usedDiscountCodes() throws DAOException{
+            ArrayList<Character> table = new ArrayList<>();
+            String sql = "SELECT DISTINCT DISCOUNT_CODE FROM PRODUCT_CODE";
+            try (   Connection connection = myDataSource.getConnection();
+                    Statement stmt = connection.createStatement();
+            ) {
+                    ResultSet rs = stmt.executeQuery(sql);
+                    while(rs.next()){
+                        char code = rs.getString("DISCOUNT_CODE").charAt(0);
+                        table.add(code);
+                    }
 
+            }  catch (SQLException ex) {
+                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+                    throw new DAOException(ex.getMessage());
+            }
+            
+            return table;
+        } 
 }
