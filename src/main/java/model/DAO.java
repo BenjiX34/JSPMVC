@@ -16,7 +16,6 @@ public class DAO {
 	protected final DataSource myDataSource;
 
 	/**
-	 *
 	 * @param dataSource la source de données à utiliser
 	 */
 	public DAO(DataSource dataSource) {
@@ -31,10 +30,10 @@ public class DAO {
 	 * @throws DAOException
 	 */
 	public int deleteDiscountCode(char discountID) throws DAOException {
-		String sql = "DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE = ?";
+		String sqlQuery = "DELETE FROM Discount_Code WHERE Discount_Code = ?";
                 
 		try (   Connection connection = myDataSource.getConnection();
-			PreparedStatement stmt = connection.prepareStatement(sql)
+			PreparedStatement stmt = connection.prepareStatement(sqlQuery)
                 ) {
 			stmt.setString(1, String.valueOf(discountID));
 			
@@ -56,10 +55,10 @@ public class DAO {
          * @throws DAOException 
          */
 	public int addDiscountCode(char discountID, float taux) throws DAOException {
-            String sql = "INSERT INTO DISCOUNT_CODE VALUES (?, ?)";
+            String sqlQuery = "INSERT INTO Discount_Code VALUES (?, ?)";
             
             try (   Connection connection = myDataSource.getConnection();
-                    PreparedStatement stmt = connection.prepareStatement(sql)
+                    PreparedStatement stmt = connection.prepareStatement(sqlQuery)
             ) {
 
                     stmt.setString(1, String.valueOf(discountID));
@@ -73,37 +72,13 @@ public class DAO {
             }
 	}
         
-        public List<DiscountCodeEntity> getFullTable() throws DAOException{
-            ArrayList<DiscountCodeEntity> table = new ArrayList<>();
-            String sql = "SELECT * FROM DISCOUNT_CODE";
-            try (   Connection connection = myDataSource.getConnection();
-                    Statement stmt = connection.createStatement();
-            ) {
-                    ResultSet rs = stmt.executeQuery(sql);
-                    while(rs.next()){
-                        char code = rs.getString("DISCOUNT_CODE").charAt(0);
-                        float taux = rs.getFloat("RATE");
-                        table.add(new DiscountCodeEntity(code, taux));
-                    }
-
-
-
-
-            }  catch (SQLException ex) {
-                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
-                    throw new DAOException(ex.getMessage());
-            }
-            
-            return table;
-        }
-	
         public List<Character> usedDiscountCodes() throws DAOException{
             ArrayList<Character> table = new ArrayList<>();
-            String sql = "SELECT DISTINCT DISCOUNT_CODE FROM PRODUCT_CODE";
+            String sqlQuery = "SELECT DISTINCT Discount_Code FROM Product_Code";
             try (   Connection connection = myDataSource.getConnection();
                     Statement stmt = connection.createStatement();
             ) {
-                    ResultSet rs = stmt.executeQuery(sql);
+                    ResultSet rs = stmt.executeQuery(sqlQuery);
                     while(rs.next()){
                         char code = rs.getString("DISCOUNT_CODE").charAt(0);
                         table.add(code);
@@ -116,4 +91,45 @@ public class DAO {
             
             return table;
         } 
+        
+        public List<DiscountCodeEntity> getFullTable() throws DAOException{
+            ArrayList<DiscountCodeEntity> table = new ArrayList<>();
+            String sqlQuery = "SELECT * FROM Discount_Code";
+            try (   Connection connection = myDataSource.getConnection();
+                    Statement stmt = connection.createStatement();
+            ) {
+                    ResultSet rs = stmt.executeQuery(sqlQuery);
+                    while(rs.next()){
+                        char code = rs.getString("DISCOUNT_CODE").charAt(0);
+                        float taux = rs.getFloat("RATE");
+                        table.add(new DiscountCodeEntity(code, taux));
+                    }
+
+            }  catch (SQLException ex) {
+                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+                    throw new DAOException(ex.getMessage());
+            }
+            
+            return table;
+        }
+        
+        
+        public int modifyDiscountCode(char discountID, float taux) throws DAOException {
+            String sqlQuery = "UPDATE Discount_Code "+
+                        "SET Rate=? WHERE Discount_Code=?";
+            
+            try (   Connection connection = myDataSource.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sqlQuery)
+            ) {
+                    System.out.println("TAUX DANS MODIFY: "+taux);
+                    stmt.setFloat(1, taux);
+                    stmt.setString(2, String.valueOf(discountID));
+
+                    return stmt.executeUpdate();
+
+            }  catch (SQLException ex) {
+                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+                    throw new DAOException(ex.getMessage());
+            }
+	}
 }

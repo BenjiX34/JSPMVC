@@ -42,25 +42,50 @@ public class DiscountCodeController extends HttpServlet {
             
             String action = request.getParameter("action");
             
+            List<Character> usedDiscountCodes = dao.usedDiscountCodes();
+            
             if(action != null){
                 char code = request.getParameter("code").charAt(0);
-                if(action.equals("ADD")){
-                    float taux = Float.parseFloat(request.getParameter("taux"));
+                String messageConfirmation = null;
+                
+                switch (action) {
+                    case "DELETE":{
+                        if(usedDiscountCodes.contains(code)){
+                            messageConfirmation = "Le code "+code+" ne peut pas être supprimé: il est utilisé";    
+                        }else{
+                            dao.deleteDiscountCode(code);
+                            messageConfirmation = "Le code "+code+" a bien été supprimé de la table";    
+                        }
+                        
+                        break;
+                    }
                     
-                    dao.addDiscountCode(code, taux);
+                    case "ADD":{
+                        float taux = Float.parseFloat(request.getParameter("taux"));
+                        System.out.println("TAUX = "+taux);
+                        dao.addDiscountCode(code, taux);
+                        messageConfirmation = "Le code "+code+" a bien été ajouté à la table";
+                        break;
+                    }
                     
-                    String confirmationAjout = "Le code "+Character.toString(code)+" a été ajouté à la table";
-                    request.setAttribute("confirmationAction", confirmationAjout);
-                }else if(action.equals("DELETE")){
-                    dao.deleteDiscountCode(code);
+                    case "MODIFY":{
+                        float taux = Float.parseFloat(request.getParameter("taux"));
+                        System.out.println("TAUX = "+taux);
+                        dao.modifyDiscountCode(code, taux);
+                        messageConfirmation = "Le code "+code+" a bien été modifié dans la table";
+                        break;
+                    }
                     
-                    String confirmationSuppression = "Le code "+Character.toString(code)+" a été supprimé de la table";
-                    request.setAttribute("confirmationAction", confirmationSuppression);
+                    default:
+                        break;
                 }
-                 
+                
+                
+               
+                request.setAttribute("confirmationAction", messageConfirmation);
+                
             }
-
-            List<Character> usedDiscountCodes = dao.usedDiscountCodes();
+               
             
             List<DiscountCodeEntity> fullTable = dao.getFullTable();
 
