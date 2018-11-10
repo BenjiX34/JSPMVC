@@ -41,9 +41,7 @@ public class DiscountCodeController extends HttpServlet {
             DAO dao = new DAO(DataSourceFactory.getDataSource());
             
             String action = request.getParameter("action");
-            
-            List<Character> usedDiscountCodes = dao.usedDiscountCodes();
-            
+                        
             if(action != null){
                 char code = request.getParameter("code").charAt(0);
                 String messageConfirmation = null;
@@ -91,6 +89,7 @@ public class DiscountCodeController extends HttpServlet {
                
             
             List<DiscountCodeEntity> fullTable = dao.getFullTable();
+            List<Character> usedDiscountCodes = dao.usedDiscountCodes();
 
             request.setAttribute("usedCodes", usedDiscountCodes);
             request.setAttribute("fullTable", fullTable);

@@ -72,6 +72,10 @@ public class DAO {
             }
 	}
         
+        /**
+         * @return la liste des codes déjà utilisés
+         * @throws DAOException 
+         */
         public List<Character> usedDiscountCodes() throws DAOException{
             ArrayList<Character> table = new ArrayList<>();
             String sqlQuery = "SELECT DISTINCT Discount_Code FROM Product_Code";
@@ -92,6 +96,10 @@ public class DAO {
             return table;
         } 
         
+        /**
+         * @return la table Discount_Code sous forme de liste
+         * @throws DAOException 
+         */
         public List<DiscountCodeEntity> getFullTable() throws DAOException{
             ArrayList<DiscountCodeEntity> table = new ArrayList<>();
             String sqlQuery = "SELECT * FROM Discount_Code";
@@ -113,7 +121,13 @@ public class DAO {
             return table;
         }
         
-        
+        /**
+         * Modifie un enregistrement de la table Discount_Code
+         * @param discountID
+         * @param taux
+         * @return le nombre d'enregistrements ajoutés (1 ou 0 si pas trouvé)
+         * @throws DAOException 
+         */
         public int modifyDiscountCode(char discountID, double taux) throws DAOException {
             String sqlQuery = "UPDATE Discount_Code "+
                         "SET Rate=? WHERE Discount_Code=?";
