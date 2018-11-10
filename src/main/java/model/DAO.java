@@ -121,7 +121,6 @@ public class DAO {
             try (   Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sqlQuery)
             ) {
-                    System.out.println("TAUX DANS MODIFY: "+(double)taux);
                     stmt.setDouble(1, taux);
                     stmt.setString(2, String.valueOf(discountID));
 

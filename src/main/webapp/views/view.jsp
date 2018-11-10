@@ -12,12 +12,19 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Table des codes de promotion</title>
+        <title>Page de gestion des codes de promotion</title>
+        <style>
+            body{background-color: #eee;}
+            a{text-decoration: none; color: #ff5555;}
+            fieldset {display:inline; padding: 10px;}
+            fieldset > * {margin: 10px;}
+            table{background-color: white;}
+        </style>
     </head>
     <body>
-        <h1>Table des codes de promotion</h1>
+        <h2>Page de gestion des codes de promotion</h2>
         <form>
-            <fieldset style='display:inline;padding:20px'>
+            <fieldset>
                 <legend>Ajout d'un code de promotion</legend>
                 <label>
                     Code: <input type="text" name="code" size="1" maxlength="1" 
@@ -25,17 +32,16 @@
                         pattern="[a-zA-Z]" required>
                 </label>
 
-                <label style="margin-left: 10px">
+                <label>
                     Taux: <input name="taux" type="number" step="0.01" min="0.0" max="99.99" size="5" required>
                 </label>
                 <input type="hidden" name="action" value="ADD">
-                <button type="submit" style="margin-left: 10px">Ajouter</button>
+                <button type="submit">Ajouter</button>
             </fieldset>
         </form>
 
-        <br>
         <form>
-            <fieldset style='display:inline;padding:20px'>
+            <fieldset>
                 <legend>Modification d'un code existant</legend>
                 <label>
                     Code:
@@ -45,11 +51,11 @@
                         </c:forEach>
                     </select>
                 </label>
-                <label style="margin-left: 10px">
+                <label>
                     Taux: <input name="taux" type="number" step="0.01" min="0.0" max="99.99" size="5" required>
                 </label>
                 <input type="hidden" name="action" value="MODIFY">
-                <button type="submit" style="margin-left: 10px">Modifier</button>
+                <button type="submit">Modifier</button>
             </fieldset>
         </form>
             
@@ -60,7 +66,14 @@
         <div>
             <p></p>
             <table border="1" cellpadding="10">
-                <th>Code</th><th>Taux</th>
+                <tr>
+                    <th colspan="3">Table des codes</th>
+                </tr>
+                
+                <tr>
+                    <th>Code</th><th>Taux</th>
+                </tr>
+                
                 <c:forEach var="ligne" items="${fullTable}">
                     <tr>
                         <td>${ligne.code}</td>
@@ -71,7 +84,7 @@
                                     Utilisé
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="?action=DELETE&code=${ligne.code}" style="text-decoration:none">Supprimer</a>
+                                    <a href="?action=DELETE&code=${ligne.code}">Supprimer</a>
                                 </c:otherwise>
                             </c:choose>
                         </td>
